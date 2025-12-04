@@ -1,3 +1,4 @@
+from core.entities import LicencePlate
 
 if __name__ == '__main__':
-    print('Hello World')
+    plate: LicencePlate = LicencePlate("ABC-1234")

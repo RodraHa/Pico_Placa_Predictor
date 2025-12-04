@@ -8,12 +8,12 @@ class LicensePlate {
 class Predictor {
     - restriction_strategy: RestrictionStrategy
     + set_restriction_Strategy(strategy: RestrictionStrategy): void
-    + predict_restriction(plate: LicensePlate, date: Date): bool
+    + can_drive(plate: LicensePlate, date: Date): bool
 }
 
 interface RestrictionStrategy {
     + get_calendar(): Map<DayOfWeek, Set<int>>
-    + is_restricted(plate: LicensePlate, date: Date): bool
+    + is_restricted(plate: LicensePlate, date: Date, time: time): bool
 }
 
 class QuitoStrategy {
