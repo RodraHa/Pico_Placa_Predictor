@@ -3,6 +3,7 @@
 class LicensePlate {
     - plate_number: string
     + get_last_digit(): int
+    + is_plate_valid(plate_number: str): bool
 }
 
 class Predictor {
@@ -25,7 +26,7 @@ class QuitoStrategy {
 class HourRange {
     - start_hour: time
     - end_hour: time
-    + contains(hour: int): bool
+    + contains(time: time): bool
 }
 
 enum DayOfWeek {
