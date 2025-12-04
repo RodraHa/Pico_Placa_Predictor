@@ -1,0 +1,48 @@
+@startuml
+
+class LicensePlate {
+    - plate_number: string
+    + get_last_digit(): int
+}
+
+class Predictor {
+    - restriction_strategy: RestrictionStrategy
+    + set_restriction_Strategy(strategy: RestrictionStrategy): void
+    + predict_restriction(plate: LicensePlate, date: Date): bool
+}
+
+interface RestrictionStrategy {
+    + get_calendar(): Map<DayOfWeek, Set<int>>
+    + is_restricted(plate: LicensePlate, date: Date): bool
+}
+
+class QuitoStrategy {
+    - hour_ranges: List<HourRange>
+    + get_calendar(): Map<DayOfWeek, Set<int>>
+    + is_restricted(plate: LicensePlate, date: Date): bool
+}
+
+class HourRange {
+    - start_hour: time
+    - end_hour: time
+    + contains(hour: int): bool
+}
+
+enum DayOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+    HOLIDAY
+    + from_date(date: Date): DayOfWeek
+}
+
+QuitoStrategy ..|> RestrictionStrategy
+Predictor o-- RestrictionStrategy
+RestrictionStrategy ..> LicensePlate
+QuitoStrategy --> HourRange
+
+@enduml
