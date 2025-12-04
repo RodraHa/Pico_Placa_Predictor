@@ -1,5 +1,6 @@
 import pytest, datetime
 from src.core.entities import LicencePlate, DaysOfWeek
+from src.strategies.quito_strategy import QuitoStrategy
 
 def test_valid_plate_creation():
     plate = LicencePlate("ABC-1234")
@@ -29,3 +30,25 @@ def test_day_of_week_from_holiday():
     assert DaysOfWeek.from_date(date) == DaysOfWeek.HOLIDAY
     date = datetime.date(2025, 5, 25)
     assert DaysOfWeek.from_date(date) != DaysOfWeek.HOLIDAY
+
+def test_quito_strategy_restricted():
+    strategy = QuitoStrategy()
+    plate = LicencePlate("ABC-1234")  # Last digit 4
+    date = datetime.date(2025, 12, 2)  # Tuesday
+    time = datetime.time(8, 0)  # Within restricted hours
+    assert strategy.is_restricted(plate, date, time) is True
+    plate = LicencePlate("ABC-1230")  # Last digit 0
+    date = datetime.date(2025, 12, 5)  # Friday
+    time = datetime.time(17, 0)  # Within restricted hours
+    assert strategy.is_restricted(plate, date, time) is True
+
+def test_quito_strategy_not_restricted():
+    strategy = QuitoStrategy()
+    plate = LicencePlate("ABC-1234")  # Last digit 4
+    date = datetime.date(2025, 12, 3)  # Wednesday
+    time = datetime.time(8, 0)  # Within restricted hours
+    assert strategy.is_restricted(plate, date, time) is False
+    plate = LicencePlate("ABC-1230")  # Last digit 0
+    date = datetime.date(2025, 12, 5)  # Friday
+    time = datetime.time(15, 0)  # Outside restricted hours
+    assert strategy.is_restricted(plate, date, time) is False
