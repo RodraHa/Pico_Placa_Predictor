@@ -28,6 +28,8 @@ def test_day_of_week_from_date():
 def test_day_of_week_from_holiday():
     date = datetime.date(2025, 5, 24)  # Batalla de Pichincha
     assert DaysOfWeek.from_date(date) == DaysOfWeek.HOLIDAY
+    date = datetime.date(2025, 1, 1)  # New Year's Day
+    assert DaysOfWeek.from_date(date) == DaysOfWeek.HOLIDAY
     date = datetime.date(2025, 5, 25)
     assert DaysOfWeek.from_date(date) != DaysOfWeek.HOLIDAY
 
@@ -41,6 +43,10 @@ def test_quito_strategy_restricted():
     date = datetime.date(2025, 12, 5)  # Friday
     time = datetime.time(17, 0)  # Within restricted hours
     assert strategy.is_restricted(plate, date, time) is True
+    plate = LicencePlate("ABC-1231")  # Last digit 1
+    date = datetime.date(2025, 12, 1)  # Monday
+    time = datetime.time(9, 30)  # Within restricted hours
+    assert strategy.is_restricted(plate, date, time) is True
 
 def test_quito_strategy_not_restricted():
     strategy = QuitoStrategy()
@@ -51,4 +57,11 @@ def test_quito_strategy_not_restricted():
     plate = LicencePlate("ABC-1230")  # Last digit 0
     date = datetime.date(2025, 12, 5)  # Friday
     time = datetime.time(15, 0)  # Outside restricted hours
+    assert strategy.is_restricted(plate, date, time) is False
+
+def test_quito_strategy_holiday():
+    strategy = QuitoStrategy()
+    plate = LicencePlate("ABC-1234")  # Last digit 4
+    date = datetime.date(2025, 5, 24)  # Holiday
+    time = datetime.time(8, 0)  # Within restricted hours
     assert strategy.is_restricted(plate, date, time) is False
