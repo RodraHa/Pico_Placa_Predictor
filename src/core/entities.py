@@ -1,4 +1,5 @@
 from enum import Enum
+from dataclasses import dataclass
 import re, datetime, holidays
 
 class LicencePlate:
@@ -35,3 +36,11 @@ class DaysOfWeek(Enum):
         if date in ec_holidays:
             return DaysOfWeek.HOLIDAY
         return DaysOfWeek(date.weekday())
+
+@dataclass(frozen=True)
+class HourRange:
+    start: datetime.time
+    end: datetime.time
+
+    def contains(self, time: datetime.time) -> bool:
+        return self.start <= time <= self.end
