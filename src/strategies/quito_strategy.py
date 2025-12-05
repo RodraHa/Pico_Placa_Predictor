@@ -31,3 +31,6 @@ class QuitoStrategy(RestrictionStrategy):
 
     def get_calendar(self) -> dict[DaysOfWeek, set[int]]:
         return self.restriction_calendar
+
+    def get_hour_ranges(self) -> list[HourRange]:
+        return self.hour_ranges
